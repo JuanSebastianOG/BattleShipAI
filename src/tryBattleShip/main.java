@@ -146,6 +146,7 @@ public class main {
             hRow=-1;
         }
         if(resultado==-1) {
+	//En implementacion se llama a si mismo cuando no logra hacer el disparo
             hCol=posMinCol;
             hRow=posMinRow;
             System.out.println("EN RESULTADO -1");
