@@ -36,6 +36,7 @@ public class Main {
             for(int i=0;i<barcos.length;i++){
                 boolean validado = false;
                 int random = 0;
+                // si random == posiciones.len reiniciar todo (Collections.shuffle(posiciones), i = 0 y new tablero)
                 while(validado == false){
                     int indx = posiciones.get(random);
                     if(validado==false){
