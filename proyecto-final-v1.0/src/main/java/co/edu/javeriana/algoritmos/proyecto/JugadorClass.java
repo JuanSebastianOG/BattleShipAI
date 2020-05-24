@@ -9,6 +9,7 @@ public class JugadorClass implements Jugador{
 	TableroClass tableroClass = new TableroClass();
 	int[][] tablero;
     ArrayList<Integer> posiciones;
+    ArrayList<Casilla> barcoPirata = new ArrayList<Casilla>();;
     int[] resumenFilas;
     int[] resumenColumnas;
     int[][] matShootBoard;
@@ -16,6 +17,7 @@ public class JugadorClass implements Jugador{
     int hRow=-1,hCol=-1;
 	int auxRow=-1,auxCol=-1;
     int col, row;
+    
 	
     public JugadorClass() {
     	
@@ -89,7 +91,6 @@ public class JugadorClass implements Jugador{
 	@Override
 	public RespuestaJugada registrarDisparoAPosicion(Casilla posicion) {
 		// TODO Auto-generated method stub
-
 		return tableroClass.dispararACasilla(posicion);
 	}
 
@@ -99,43 +100,66 @@ public class JugadorClass implements Jugador{
 		if(hRow!=-1 && hCol!=-1) {
 			return hunt(hRow, hCol);
 		}else {
-			int minCol = 0, minRow = 0;
-			int posMinCol=0, posMinRow=0;
+			int maximoCalor = 0;
 			
-			//Busqueda menor y mayor en el resumen
-			for (int i = 0; i < dimension; i++) {
-				if (resumenFilas[i] > minRow) {
-					minRow = resumenFilas[i];
-					posMinRow = i;
-				}
-				if (resumenColumnas[i] > minCol) {
-					minCol = resumenColumnas[i] ;
-					posMinCol = i;
-				}
-			}
-			if (minCol > minRow) {
-				while(true) {
-					for (int i = 0; i < dimension; i += minCol) {
-						if (matShootBoard[i][posMinCol] == 0) {
+			if(auxRow == -1 && auxRow == -1) {
+				for(int i = 0; i<dimension;i++) {
+					for(int j = 0; j<dimension;j++) {
+						if(maximoCalor < this.resumenFilas[i]+this.resumenColumnas[j] && matShootBoard[i][j] == 0) {
+							maximoCalor=this.resumenFilas[i]+this.resumenColumnas[j];
 							this.row = i;
-							this.col = posMinCol;
-							return new Casilla(row, col);
+							this.col = j;
 						}
 					}
-					minCol--;
 				}
-			} else{
-				while(true) {
-					for (int i = 0; i < dimension; i += minRow) {
-						if (matShootBoard[posMinRow][i] == 0) {
-							this.row = posMinRow;
-							this.col = i;
-							return new Casilla(row, col);
-						}
-					}
-					minRow--;
-				}
+				return new Casilla(row,col);
+			}else {
+				if (auxCol+1<dimension&&matShootBoard[auxRow][auxCol + 1] == 0&&maximoCalor < this.resumenFilas[auxRow]+this.resumenColumnas[auxCol+1]) {
+		        	this.row = auxRow;
+					this.col = auxCol+1;
+		        	this.casos = 1;
+		        	return new Casilla(row,col);
+		        } else if (auxRow+1<dimension&&auxCol+1<dimension&&matShootBoard[auxRow + 1][auxCol + 1] == 0&&maximoCalor < this.resumenFilas[auxRow+1]+this.resumenColumnas[auxCol+1]) {
+		        	this.row = auxRow+1;
+		        	this.col = auxCol+1;
+		        	this.casos = 2;
+		        	return new Casilla(row,col);
+		        } else if (auxRow+1<dimension&&matShootBoard[auxRow + 1][auxCol] == 0&&maximoCalor < this.resumenFilas[auxRow+1]+this.resumenColumnas[auxCol]) {
+		        	this.row = auxRow+1;
+		        	this.col = auxCol;
+		        	this.casos = 3;
+		        	return new Casilla(row,col);
+		        } else if (auxRow+1<dimension&&auxCol-1>=0&&matShootBoard[auxRow + 1][auxCol - 1] == 0&&maximoCalor < this.resumenFilas[auxRow+1]+this.resumenColumnas[auxCol-1]) {
+		        	this.row = auxRow+1;
+		        	this.col = auxCol-1;
+		        	this.casos = 4;
+		        	return new Casilla(row,col);
+		        } else if (auxCol-1>=0&&matShootBoard[auxRow][auxCol - 1] == 0&&maximoCalor < this.resumenFilas[auxRow]+this.resumenColumnas[auxCol-1]) {
+		        	this.row = auxRow;
+		        	this.col = auxCol-1;
+		        	this.casos = 5;
+		        	return new Casilla(row,col);
+		        }else if (auxRow-1>=0&&auxCol-1>=0&&matShootBoard[auxRow - 1][auxCol - 1] == 0&&maximoCalor < this.resumenFilas[auxRow-1]+this.resumenColumnas[auxCol-1]) {
+		        	this.row = auxRow-1;
+		        	this.col = auxCol-1;
+		        	this.casos = 6;
+		        	return new Casilla(row,col);
+		        } else if (auxRow-1>=0&&matShootBoard[auxRow - 1][auxCol] == 0&&maximoCalor < this.resumenFilas[auxRow-1]+this.resumenColumnas[auxCol]) {
+		        	this.row = auxRow-1;
+		        	this.col = auxCol;
+		        	this.casos = 7;
+		        	return new Casilla(row,col);
+		        } else if (auxRow-1>=0&&auxCol+1<dimension&&matShootBoard[auxRow - 1][auxCol + 1] == 0&&maximoCalor < this.resumenFilas[auxRow-1]+this.resumenColumnas[auxCol+1]) {
+		        	this.row = auxRow-1;
+		        	this.col = auxCol+1;
+		        	this.casos = 8;
+		        	return new Casilla(row,col);
+		        }
+				this.auxRow = -1;
+				this.auxRow = -1;
+				return realizarDisparo();
 			}
+			
 		}
 	}
 
@@ -163,8 +187,8 @@ public class JugadorClass implements Jugador{
 				}else if(casoReconocido==8) {
 					casoReconocido=4;
 				}
-	            col=auxCol;
-	            row=auxRow;
+	            hCol=auxCol;
+	            hRow=auxRow;
 			}
 		}
 		if(resultado.getLetrero().equalsIgnoreCase("impacto") && this.auxCol==-1 && this.auxRow ==-1) {
@@ -173,8 +197,7 @@ public class JugadorClass implements Jugador{
 			this.resumenColumnas[col]-=1;
 			this.auxCol=col;
 			this.auxRow=row;
-			this.hCol=col;
-			this.hRow=row;
+			barcoPirata.add(new Casilla(row,col));
 			if(casos!=0) casoReconocido=casos;
 		}else if(resultado.getLetrero().equalsIgnoreCase("impacto")) {
 				this.matShootBoard[row][col]=1;
@@ -182,6 +205,7 @@ public class JugadorClass implements Jugador{
 				this.resumenColumnas[col]-=1;
 				this.hCol=col;
 				this.hRow=row;
+				barcoPirata.add(new Casilla(row,col));
 				if(casos!=0) casoReconocido=casos;
 			}
 		if(resultado.getLetrero().equalsIgnoreCase("hundido")) {
@@ -194,6 +218,27 @@ public class JugadorClass implements Jugador{
 			this.hRow=-1;
 			casos=0;
 			casoReconocido=0;
+			barcoPirata.add(new Casilla(row,col));
+			for(Casilla c:barcoPirata) {
+				if (c.getColumna()+1<dimension) {
+					matShootBoard[c.getFila()][c.getColumna() + 1] = 2;
+		        } if (c.getFila()+1<dimension&&c.getColumna()+1<dimension) {
+			        matShootBoard[c.getFila() + 1][c.getColumna() + 1] = 2;
+		        } if (c.getFila()+1<dimension) {
+			        matShootBoard[c.getFila() + 1][c.getColumna()] = 2;
+		        } if (c.getFila()+1<dimension&&c.getColumna()-1>=0) {
+			        matShootBoard[c.getFila() + 1][c.getColumna() - 1] = 2;
+		        } if (c.getColumna()-1>=0) {
+			        matShootBoard[c.getFila()][c.getColumna() - 1] =2;
+		        } if (c.getFila()-1>=0&&c.getColumna()-1>=0) {
+			        matShootBoard[c.getFila() - 1][c.getColumna() - 1]=2;
+		        } if (c.getFila()-1>=0) {
+			        matShootBoard[c.getFila() - 1][c.getColumna()]=2;
+		        } if (c.getFila()-1>=0&&c.getColumna()+1<dimension) {
+			        matShootBoard[c.getFila() - 1][c.getColumna() + 1]=2;
+		        }
+			}
+			barcoPirata.clear();
 		}
 		
 	}

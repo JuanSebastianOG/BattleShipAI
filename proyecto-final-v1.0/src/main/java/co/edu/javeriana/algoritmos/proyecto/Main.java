@@ -10,9 +10,9 @@ public class Main {
 			Jugador jugadorA = new JugadorClass();
 			Jugador jugadorB = new JugadorClass();
 			
-			int[]barcos= {5,5,5,1,3};
-			Tablero tableroA = jugadorA.iniciarTablero(10, barcos);
-			Tablero tableroB = jugadorB.iniciarTablero(10, barcos);
+			int[]barcos= {1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5};
+			Tablero tableroA = jugadorA.iniciarTablero(100, barcos);
+			Tablero tableroB = jugadorB.iniciarTablero(100, barcos);
 			ResumenTablero rtA = tableroA.obtenerResumen();
 			ResumenTablero rtB = tableroB.obtenerResumen();
 			
